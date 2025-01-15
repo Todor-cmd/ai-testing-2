@@ -8,9 +8,9 @@ def get_predictions(data, session):
 
 #  Audit Rate Invariance (Mean Age Test)
 def mean_age_test(X_test, session):
-    age_mean = X_test['age'].mean()
+    age_mean = X_test['persoon_leeftijd_bij_onderzoek'].mean()
     X_invariant = X_test.copy()
-    X_invariant['age'] = age_mean
+    X_invariant['persoon_leeftijd_bij_onderzoek'] = age_mean
     y_pred_original = get_predictions(X_test, session)
     y_pred_invariant = get_predictions(X_invariant, session)
     audit_rate_original = np.mean(y_pred_original)
@@ -23,7 +23,7 @@ def sensitivity_test(X_test, session ,variations=[-5, +5]):
     y_pred_original = get_predictions(X_test, session=session)
     for variation in variations:
         X_sensitive = X_test.copy()
-        X_sensitive['age'] += variation
+        X_sensitive['persoon_leeftijd_bij_onderzoek'] += variation
         y_pred_sensitive = get_predictions(X_sensitive, session)
         audit_rate_sensitive = np.mean(y_pred_sensitive)
         print(f"Audit Sensitivity - Variation {variation}: {audit_rate_sensitive}")
@@ -32,7 +32,7 @@ def sensitivity_test(X_test, session ,variations=[-5, +5]):
 def age_swapping_test(X_test, session):
     y_pred_original = get_predictions(X_test, session)
     X_swap = X_test.copy()
-    X_swap['age'] = np.random.permutation(X_swap['age'])
+    X_swap['persoon_leeftijd_bij_onderzoek'] = np.random.permutation(X_swap['persoon_leeftijd_bij_onderzoek'])
     y_pred_swapped = get_predictions(X_swap, session)
     swap_diff = np.mean(y_pred_original != y_pred_swapped)
     print(f"Age Swapping - Prediction Difference: {swap_diff}")
