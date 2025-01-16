@@ -83,7 +83,7 @@ def metamorphic_test_model_1(X_test, session):
 
     # 2. Swap Relation Test: Swap all neighborhood columns and check the prediction difference
     print("\nRunning Swap Relation Test:")
-    swap_relation_test(X_test, neighborhood_columns)  # Swap all columns
+    swap_relation_test(X_test, neighborhood_columns, session)  # Swap all columns
 
 
 

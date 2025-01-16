@@ -3,7 +3,7 @@ import numpy as np
 import onnxruntime as rt
 from sklearn.metrics import accuracy_score
 
-from .metamorphic_testing import metamorphic_test_model_2
+from .metamorphic_testing import metamorphic_test_model_2, metamorphic_test_model_1
 
 def model_testing_experiment(model_path):
     # Load data
@@ -12,11 +12,26 @@ def model_testing_experiment(model_path):
     # Load the model
     new_session = rt.InferenceSession(model_path)
 
+    #Check which model we're testing 
+    model = 0
+    if "model_1.onnx" in model_path:
+        model = 1
+    else:
+        if "model_2.onnx" in model_path:
+            model = 2
+
+    print(f"model = {model}")
+    #TODO some check if model is still 0 something is wrong
+
+
     # Run the model
     y_pred = new_session.run(None, {'X': X.values.astype(np.float32)})
 
     # TODO: add check for whether its model 1 or 2
-    metamorphic_test_model_2(X, new_session)
+    if model == 1:
+        metamorphic_test_model_1(X, new_session)
+    else:
+        metamorphic_test_model_2(X, new_session)
 
     # Perform tests
     test_summary = {}
