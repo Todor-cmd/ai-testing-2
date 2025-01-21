@@ -18,6 +18,19 @@ def mean_age_test(X_test, session):
     print(f"Audit Rate - Original: {audit_rate_original}, Invariant: {audit_rate_invariant}")
     print(f"Difference in Audit Rate: {audit_rate_original - audit_rate_invariant}")
 
+
+#  Audit Rate Invariance (Mean Age Test)
+def zero_age_test(X_test, session):
+    X_invariant = X_test.copy()
+    X_invariant['persoon_leeftijd_bij_onderzoek'] = 0
+    y_pred_original = get_predictions(X_test, session)
+    y_pred_invariant = get_predictions(X_invariant, session)
+    audit_rate_original = np.mean(y_pred_original)
+    audit_rate_invariant = np.mean(y_pred_invariant)
+    print(f"Audit Rate (zero) - Original: {audit_rate_original}, Invariant: {audit_rate_invariant}")
+    print(f"Difference in Audit Rate(zero): {audit_rate_original - audit_rate_invariant}")
+
+
 # Sensitivity Test (Small Variations)
 def sensitivity_test(X_test, session ,variations=[-5, +5]):
     y_pred_original = get_predictions(X_test, session=session)
@@ -72,7 +85,9 @@ def metamorphic_test_model_1(X_test, session):
     neighborhood_columns = [
         'adres_recentste_wijk_charlois', 'adres_recentste_wijk_delfshaven', 'adres_recentste_wijk_feijenoord',
         'adres_recentste_wijk_ijsselmonde', 'adres_recentste_wijk_kralingen_c', 'adres_recentste_wijk_noord',
-        'adres_recentste_wijk_other', 'adres_recentste_wijk_prins_alexa', 'adres_recentste_wijk_stadscentru'
+        'adres_recentste_wijk_other', 'adres_recentste_wijk_prins_alexa', 'adres_recentste_wijk_stadscentru',
+        'adres_recentst_onderdeel_rdam', 'adres_recentste_buurt_groot_ijsselmonde', 'adres_recentste_buurt_nieuwe_westen',
+        'adres_recentste_buurt_other', 'adres_recentste_buurt_oude_noorden','adres_recentste_buurt_vreewijk'
     ]
     
     # 1. Invariant Relation Test: Change a few neighborhood columns to a constant value and check the prediction difference
@@ -90,5 +105,6 @@ def metamorphic_test_model_1(X_test, session):
 # do metamorphic tests on the age for model 2 because of the hint
 def metamorphic_test_model_2(X, session):
     mean_age_test(X, session)
+    zero_age_test(X, session)
     sensitivity_test(X, session)
     age_swapping_test(X, session)
