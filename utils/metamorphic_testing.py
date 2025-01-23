@@ -79,8 +79,8 @@ def swap_relation_test(X_test, columns_to_swap, session):
     return difference
 
 
-# do metamorphic test on region columns for model 1 because of the hint
-def metamorphic_test_model_1(X_test, session):
+# do metamorphic test on region columns because of the hint for model 1
+def metamorphic_test_regions(X_test, session):
     # List of neighborhood columns to test on
     neighborhood_columns = [
         'adres_recentste_wijk_charlois', 'adres_recentste_wijk_delfshaven', 'adres_recentste_wijk_feijenoord',
@@ -90,21 +90,32 @@ def metamorphic_test_model_1(X_test, session):
         'adres_recentste_buurt_other', 'adres_recentste_buurt_oude_noorden','adres_recentste_buurt_vreewijk'
     ]
     
+    results = {
+        'invariant_relation_tests': {},
+        'swap_relation_test': None
+    }
+    
     # 1. Invariant Relation Test: Change a few neighborhood columns to a constant value and check the prediction difference
     print("\nRunning Invariant Relation Test:")
     for column in neighborhood_columns[:3]:  # Test on first 3 columns for invariant relation
         print(f"Testing column: {column}")
-        invariant_relation_test(X_test, column, 0, session)  # Setting it to 0 for example
+        diff = invariant_relation_test(X_test, column, 0, session)  # Setting it to 0 for example
+        results['invariant_relation_tests'][column] = diff
 
     # 2. Swap Relation Test: Swap all neighborhood columns and check the prediction difference
     print("\nRunning Swap Relation Test:")
-    swap_relation_test(X_test, neighborhood_columns, session)  # Swap all columns
+    swap_diff = swap_relation_test(X_test, neighborhood_columns, session)  # Swap all columns
+    results['swap_relation_test'] = swap_diff
+    
+    return results
 
 
-
-# do metamorphic tests on the age for model 2 because of the hint
-def metamorphic_test_model_2(X, session):
-    mean_age_test(X, session)
-    zero_age_test(X, session)
-    sensitivity_test(X, session)
-    age_swapping_test(X, session)
+# do metamorphic tests on the age because of the hint for model 2 
+def metamorphic_test_age(X, session):
+    results = {
+        'mean_age_test': mean_age_test(X, session),
+        'zero_age_test': zero_age_test(X, session),
+        'sensitivity_test': sensitivity_test(X, session),
+        'age_swapping_test': age_swapping_test(X, session)
+    }
+    return results

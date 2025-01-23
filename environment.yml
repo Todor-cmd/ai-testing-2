@@ -26,3 +26,5 @@ dependencies:
     - tensorflow==2.15.0
     - uuid==1.30
     - aif360
+    - aif360[Reductions]
+    - aif360[inFairness]

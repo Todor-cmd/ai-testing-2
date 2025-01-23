@@ -6,17 +6,18 @@ from aif360.datasets import BinaryLabelDataset
 from aif360.metrics import ClassificationMetric
 from sklearn.model_selection import train_test_split
 
-def analyze_model_fairness(data_path, model_paths, protected_attributes):
+def analyze_model_fairness(data_path, model_paths, protected_attributes, with_plot=False):
     data = pd.read_csv(data_path)
     data = data.astype(np.float32)
     data = data.drop(["Ja", "Nee"], axis=1)
-
-    for attribute in protected_attributes:
-        plt.figure()
-        plt.title(attribute)
-        plt.hist(data[attribute])
-        plt.show()
-        print(f"{attribute}: {data[attribute].unique()}, max={data[attribute].unique().max()}")
+    
+    if with_plot:
+        for attribute in protected_attributes:
+            plt.figure()
+            plt.title(attribute)
+            plt.hist(data[attribute])
+            plt.show()
+            print(f"{attribute}: {data[attribute].unique()}, max={data[attribute].unique().max()}")
 
     train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
 
@@ -84,6 +85,66 @@ def analyze_model_fairness(data_path, model_paths, protected_attributes):
 
     return results
 
+def fairness_test(X_test : pd.DataFrame, Y_test : pd.Series, session, protected_attributes):
+    # Create privileged and unprivileged groups for each protected attribute
+    for attribute in protected_attributes:
+        if attribute == 'persoon_leeftijd_bij_onderzoek':
+            X_test[f'privileged_group_{attribute}'] = X_test[attribute] > 40
+        elif attribute == 'adres_aantal_brp_adres':
+            X_test[f'privileged_group_{attribute}'] = X_test[attribute] < 4
+        elif attribute == 'adres_aantal_verschillende_wijken':
+            X_test[f'privileged_group_{attribute}'] = X_test[attribute] < 3
+        elif attribute == 'adres_aantal_verzendadres':
+            X_test[f'privileged_group_{attribute}'] = X_test[attribute] < 1
+        elif attribute == 'adres_aantal_woonadres_handmatig':
+            X_test[f'privileged_group_{attribute}'] = X_test[attribute] < 1
+        elif attribute == 'adres_dagen_op_adres':
+            X_test[f'privileged_group_{attribute}'] = X_test[attribute] > 6000
+        else:
+            X_test[f'privileged_group_{attribute}'] = X_test[attribute] == 0
+
+    # Prepare dataset for AIF360
+    protected_attribute_names = [f'privileged_group_{attribute}' for attribute in protected_attributes]
+
+    # Get model predictions
+    input_name = session.get_inputs()[0].name
+    predictions = session.run(None, {input_name: X_test.drop(protected_attribute_names, axis=1).values.astype(np.float32)})[0]
+
+    # Create DataFrame with features and label
+    test_data = pd.concat([X_test, Y_test.rename('checked')], axis=1)
+    
+    dataset = BinaryLabelDataset(
+        favorable_label=1,
+        unfavorable_label=0,
+        df=test_data,
+        label_names=['checked'],
+        protected_attribute_names=protected_attribute_names
+    )
+
+    pred_dataset = dataset.copy()
+    pred_dataset.scores = predictions
+
+    feature_results = {}
+
+    # Calculate fairness metrics for each protected attribute
+    for attribute in protected_attribute_names:
+        metrics = ClassificationMetric(
+            dataset,
+            pred_dataset,
+            unprivileged_groups=[{attribute: 0}],
+            privileged_groups=[{attribute: 1}]
+        )
+
+        feature_results[attribute] = {
+            'disparate_impact': metrics.disparate_impact(),
+            'statistical_parity_difference': metrics.statistical_parity_difference(),
+            'equal_opportunity_difference': metrics.equal_opportunity_difference(),
+            'average_odds_difference': metrics.average_odds_difference()
+        }
+
+    return feature_results
+
+
 def print_fairness_report(results):
     for model_name, features in results.items():
         print(f"\n=== Fairness Report for {model_name} ===")
@@ -94,7 +155,6 @@ def print_fairness_report(results):
             print(f"Statistical Parity Difference: {metrics['statistical_parity_difference']:.3f}")
             print(f"Equal Opportunity Difference: {metrics['equal_opportunity_difference']:.3f}")
             print(f"Average Odds Difference: {metrics['average_odds_difference']:.3f}")
-            print(f"Theil Index: {metrics['theil_index']:.3f}")
 
 
 def plot_fairness_metrics(results):
@@ -106,7 +166,7 @@ def plot_fairness_metrics(results):
     results = clean_results
 
     metrics = ['disparate_impact', 'statistical_parity_difference',
-               'equal_opportunity_difference', 'average_odds_difference', 'theil_index']
+               'equal_opportunity_difference', 'average_odds_difference']
 
     plt.rcParams['figure.figsize'] = (20, 10)
     plt.rcParams['font.size'] = 12
@@ -153,10 +213,10 @@ def plot_fairness_metrics(results):
 
 
 if __name__ == "__main__":
-    data_path = r'C:\Users\matte\OneDrive\Documents\DSAIT\Q2\ai-testing-2\data\investigation_train_large_checked.csv'
+    data_path = 'data\investigation_train_large_checked.csv'
     model_paths = [
-        r'C:\Users\matte\OneDrive\Documents\DSAIT\Q2\ai-testing-2\models\model_1.onnx',
-        r'C:\Users\matte\OneDrive\Documents\DSAIT\Q2\ai-testing-2\models\model_2.onnx'
+        'models\model_1.onnx',
+        'models\model_2.onnx'
     ]
 
     protected_attributes = [
@@ -187,5 +247,5 @@ if __name__ == "__main__":
     ]
 
     results = analyze_model_fairness(data_path, model_paths, protected_attributes)
-    plot_fairness_metrics(results)
+    # plot_fairness_metrics(results)
     print_fairness_report(results)
