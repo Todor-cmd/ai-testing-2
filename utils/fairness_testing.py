@@ -85,7 +85,35 @@ def analyze_model_fairness(data_path, model_paths, protected_attributes, with_pl
 
     return results
 
-def fairness_test(X_test : pd.DataFrame, Y_test : pd.Series, session, protected_attributes):
+def fairness_test(X_test : pd.DataFrame, Y_test : pd.Series, session, protected_attributes = None):
+    if protected_attributes is None:
+        protected_attributes = [
+            'persoon_leeftijd_bij_onderzoek',
+            'adres_aantal_brp_adres',
+            'adres_aantal_verschillende_wijken',
+            'adres_aantal_verzendadres',
+            'adres_aantal_woonadres_handmatig',
+            'adres_dagen_op_adres',
+            'adres_recentst_onderdeel_rdam',
+            'adres_recentste_buurt_groot_ijsselmonde',
+            'adres_recentste_buurt_nieuwe_westen',
+            'adres_recentste_buurt_other',
+            'adres_recentste_buurt_oude_noorden',
+            'adres_recentste_buurt_vreewijk',
+            'adres_recentste_plaats_other',
+            'adres_recentste_plaats_rotterdam',
+            'adres_recentste_wijk_charlois',
+            'adres_recentste_wijk_delfshaven',
+            'adres_recentste_wijk_feijenoord',
+            'adres_recentste_wijk_ijsselmonde',
+            'adres_recentste_wijk_kralingen_c',
+            'adres_recentste_wijk_noord',
+            'adres_recentste_wijk_other',
+            'adres_recentste_wijk_prins_alexa',
+            'adres_recentste_wijk_stadscentru',
+            'adres_unieke_wijk_ratio'
+        ]
+        
     # Create privileged and unprivileged groups for each protected attribute
     for attribute in protected_attributes:
         if attribute == 'persoon_leeftijd_bij_onderzoek':

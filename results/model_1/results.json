@@ -1,0 +1,254 @@
+{
+    "performance_metrics": {
+        "accuracy": 0.8436538461538462,
+        "recall": 0.5013850415512465,
+        "precision": 0.4884690873405299,
+        "f1_score": 0.494842798558469
+    },
+    "fairness_metrics": {
+        "privileged_group_persoon_leeftijd_bij_onderzoek": {
+            "disparate_impact": 2.725161401503051,
+            "statistical_parity_difference": 0.19514421026557055,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_aantal_brp_adres": {
+            "disparate_impact": 1.2735655558167662,
+            "statistical_parity_difference": 0.03869683756491846,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_aantal_verschillende_wijken": {
+            "disparate_impact": 1.2567566023289567,
+            "statistical_parity_difference": 0.0365414140362747,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_aantal_verzendadres": {
+            "disparate_impact": 0.8344213641694017,
+            "statistical_parity_difference": -0.02715546246869943,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_aantal_woonadres_handmatig": {
+            "disparate_impact": 1.2670552861308202,
+            "statistical_parity_difference": 0.036301931879916066,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_dagen_op_adres": {
+            "disparate_impact": 1.511464007429704,
+            "statistical_parity_difference": 0.06696631849102422,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentst_onderdeel_rdam": {
+            "disparate_impact": 1.0008281155322156,
+            "statistical_parity_difference": 0.0001263790772056128,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_buurt_groot_ijsselmonde": {
+            "disparate_impact": 0.576758618641803,
+            "statistical_parity_difference": -0.06474949235235063,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_buurt_nieuwe_westen": {
+            "disparate_impact": 1.3882829124566598,
+            "statistical_parity_difference": 0.05922756523022096,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_buurt_other": {
+            "disparate_impact": 1.0259413428582183,
+            "statistical_parity_difference": 0.00391183681221971,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_buurt_oude_noorden": {
+            "disparate_impact": 0.818296370967742,
+            "statistical_parity_difference": -0.02775639051432091,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_buurt_vreewijk": {
+            "disparate_impact": 1.3356030124832352,
+            "statistical_parity_difference": 0.05118555137866121,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_plaats_other": {
+            "disparate_impact": 1.0653944377917348,
+            "statistical_parity_difference": 0.009983574461972677,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_plaats_rotterdam": {
+            "disparate_impact": 0.9976588540320105,
+            "statistical_parity_difference": -0.00035832845512623335,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_charlois": {
+            "disparate_impact": 0.9412775102632569,
+            "statistical_parity_difference": -0.009025091923817924,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_delfshaven": {
+            "disparate_impact": 1.1182708194372886,
+            "statistical_parity_difference": 0.017775414652457522,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_feijenoord": {
+            "disparate_impact": 1.109317164012976,
+            "statistical_parity_difference": 0.01639073245945405,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_ijsselmonde": {
+            "disparate_impact": 1.0349214872658719,
+            "statistical_parity_difference": 0.005326152879338741,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_kralingen_c": {
+            "disparate_impact": 0.7972416772785156,
+            "statistical_parity_difference": -0.03125898347391373,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_noord": {
+            "disparate_impact": 1.0186356855434613,
+            "statistical_parity_difference": 0.0028451148794100267,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_other": {
+            "disparate_impact": 0.9033104354186801,
+            "statistical_parity_difference": -0.014960132745931692,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_prins_alexa": {
+            "disparate_impact": 1.2420659181167957,
+            "statistical_parity_difference": 0.03662616496857035,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_recentste_wijk_stadscentru": {
+            "disparate_impact": 0.849847908857211,
+            "statistical_parity_difference": -0.022978760030661488,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        },
+        "privileged_group_adres_unieke_wijk_ratio": {
+            "disparate_impact": 0.8113804627126805,
+            "statistical_parity_difference": -0.03467013403535951,
+            "equal_opportunity_difference": 0.0,
+            "average_odds_difference": 0.0
+        }
+    },
+    "robustness_metrics": {
+        "noise_levels": [
+            0.0,
+            0.05263157894736842,
+            0.10526315789473684,
+            0.15789473684210525,
+            0.21052631578947367,
+            0.2631578947368421,
+            0.3157894736842105,
+            0.3684210526315789,
+            0.42105263157894735,
+            0.47368421052631576,
+            0.5263157894736842,
+            0.5789473684210527,
+            0.631578947368421,
+            0.6842105263157894,
+            0.7368421052631579,
+            0.7894736842105263,
+            0.8421052631578947,
+            0.894736842105263,
+            0.9473684210526315,
+            1.0
+        ],
+        "accuracies": [
+            0.8436538461538462,
+            0.8433461538461539,
+            0.8438076923076923,
+            0.8429615384615384,
+            0.839076923076923,
+            0.8288846153846153,
+            0.8133076923076923,
+            0.7982692307692307,
+            0.7854615384615384,
+            0.7723461538461538,
+            0.7589615384615385,
+            0.7496153846153846,
+            0.7364615384615385,
+            0.7301923076923077,
+            0.7209615384615384,
+            0.7137307692307693,
+            0.7088076923076924,
+            0.6988461538461539,
+            0.6956923076923077,
+            0.6911923076923077
+        ],
+        "prediction_differences": [
+            0.0,
+            0.0015384615384615385,
+            0.0016153846153846153,
+            0.003076923076923077,
+            0.016807692307692308,
+            0.04623076923076923,
+            0.08503846153846153,
+            0.12084615384615384,
+            0.15096153846153845,
+            0.1766923076923077,
+            0.20207692307692307,
+            0.2221153846153846,
+            0.23865384615384616,
+            0.24684615384615385,
+            0.2632307692307692,
+            0.27376923076923076,
+            0.2783846153846154,
+            0.2890384615384615,
+            0.2948846153846154,
+            0.3016153846153846
+        ]
+    },
+    "metamorphic_metrics": {
+        "metamorphic_test_age": {
+            "mean_age_test": {
+                "original_rate": 0.15676923076923077,
+                "invariant_rate": 0.11715384615384615,
+                "difference": 0.03961538461538462
+            },
+            "zero_age_test": {
+                "original_rate": 0.15676923076923077,
+                "zero_rate": 0.2716153846153846,
+                "difference": -0.11484615384615382
+            },
+            "sensitivity_test": {
+                "original_rate": 0.15676923076923077,
+                "variations": {
+                    "-5": 0.16434615384615384,
+                    "5": 0.18665384615384614
+                }
+            },
+            "age_swapping_test": {
+                "prediction_difference": 0.13046153846153846
+            }
+        },
+        "metamorphic_test_regions": {
+            "invariant_relation_tests": {
+                "adres_recentste_wijk_charlois": 0.0010769230769230769,
+                "adres_recentste_wijk_delfshaven": 0.0005,
+                "adres_recentste_wijk_feijenoord": 0.0027307692307692306
+            },
+            "swap_relation_test": 0.012269230769230768
+        }
+    }
+}

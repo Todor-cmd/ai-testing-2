@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 
-def robustness_test(session, X, y, noise_levels=np.linspace(0, 1, 20), with_plot=False, save_path='robustness_plot.png'):
+def robustness_test(X, y, session, noise_levels=np.linspace(0, 1, 20), with_plot=False, save_path='robustness_plot.png'):
     """
     Test the robustness of a model by evaluating its performance on noisy data.
     
@@ -63,12 +63,12 @@ def robustness_test(session, X, y, noise_levels=np.linspace(0, 1, 20), with_plot
         plt.savefig(save_path)  # Save the plot to the specified path
         plt.close()  # Close the plot to free up memory
         
-        # Return results
-        return {
-            'noise_levels': noise_levels,
-            'accuracies': accuracies,
-            'prediction_differences': prediction_differences,
-        }
+    # Return results
+    return {
+        'noise_levels': noise_levels.tolist(),
+        'accuracies': list(accuracies),
+        'prediction_differences': list(prediction_differences),
+    }
 
 
 
@@ -124,11 +124,11 @@ def robustness_test_two_models(session_1, session_2, X, y, noise_levels=np.linsp
         plt.savefig(save_path)  # Save the plot to the specified path
         plt.close()  # Close the plot to free up memory
     
-    # Return results
+    # Return results with converted numpy arrays to lists
     return {
-        'noise_levels': noise_levels,
-        'accuracies_model_1': accuracies_1,
-        'accuracies_model_2': accuracies_2,
-        'prediction_differences_model_1': prediction_differences_1,
-        'prediction_differences_model_2': prediction_differences_2,
+        'noise_levels': noise_levels.tolist(),
+        'accuracies_model_1': list(accuracies_1),
+        'accuracies_model_2': list(accuracies_2),
+        'prediction_differences_model_1': list(prediction_differences_1),
+        'prediction_differences_model_2': list(prediction_differences_2),
     }

@@ -1,80 +1,69 @@
 import pandas as pd
 import numpy as np
 import onnxruntime as rt
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 
-from .metamorphic_testing import metamorphic_test_model_2, metamorphic_test_model_1
-from .robustness_testing import robustness_test, robustness_test_two_models
+from sklearn.model_selection import train_test_split
+from utils.fairness_testing import fairness_test
+from utils.robustness_testing import robustness_test
+from utils.metamorphic_testing import metamorphic_test
 
 def model_testing_experiment(model_path):
     # Load data
-    X, y = load_data()
+    X_test, Y_test = load_test_data()
 
     # Load the model
-    new_session = rt.InferenceSession(model_path)
-
-    #Check which model we're testing 
-    model = 0
-    if "model_1.onnx" in model_path:
-        model = 1
-    else:
-        if "model_2.onnx" in model_path:
-            model = 2
-
-    print(f"model = {model}")
-    #TODO some check if model is still 0 something is wrong
-
+    session = rt.InferenceSession(model_path)
 
     # Run the model
-    y_pred = new_session.run(None, {'X': X.values.astype(np.float32)})
+    y_pred = session.run(None, {'X': X_test.values.astype(np.float32)})
 
     # Perform tests
     test_summary = {}
 
-    # Metamorphic tests
-   
-    if model == 1:
-        print("\n\n\nmodel 1 neighbourhood test")
-        metamorphic_test_model_1(X, new_session)
-        print("\n\n\nmodel 1 age test")
-        metamorphic_test_model_2(X, new_session)
+    
 
-    else:
-        print("\n\n\nmodel 2 neighbourhood test")
-        metamorphic_test_model_1(X, new_session)
-        print("model 2 age test")
-        metamorphic_test_model_2(X, new_session)
+    # test results
+    test_summary['performance_metrics'] = performance_test(Y_test, y_pred)
 
+    # Create copies for fairness test
+    X_test_fair = X_test.copy()
+    Y_test_fair = Y_test.copy()
+    test_summary['fairness_metrics'] = fairness_test(X_test_fair, Y_test_fair, session)
 
+    # Create copies for robustness test
+    X_test_robust = X_test.copy()
+    Y_test_robust = Y_test.copy()
+    test_summary['robustness_metrics'] = robustness_test(X_test_robust, Y_test_robust, session)
 
-    # Robustness test
-    robustness_result = robustness_test(new_session, X, y, save_path=f'model_{model}_robustness_plot.png')
-    test_summary["robustness"] = robustness_result
-
-
-    accuracy = accuracy_score(y, y_pred[0])
-    test_summary['accuracy'] = accuracy
-
-
-
-    # TODO: Add more tests here
-    # I think its nice if the test results are added to the test_summary dict that we later upload to a directory "testing_results"
-    # save_test_results(test_summary, model_name)
+    # Create copy for metamorphic test
+    X_test_meta = X_test.copy()
+    test_summary['metamorphic_metrics'] = metamorphic_test(X_test_meta, session)
 
     return test_summary
 
 
-def load_data():
+def load_test_data():
     data = pd.read_csv('data/investigation_train_large_checked.csv')
     data = data.astype(np.float32)
     data = data.drop(["Ja", "Nee"], axis=1)
 
-    X = data.drop('checked', axis=1)
-    y = data['checked']
+    
+    
+    train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
+    
+    X_test = test_data.drop('checked', axis=1)
+    Y_test = test_data['checked']
 
-    return X, y
+    return X_test, Y_test
 
-def save_test_results(test_results, model_name):
-    # TODO: Implement this function
-    pass
 
+def performance_test(Y_test, y_pred):
+    return {
+        'accuracy': accuracy_score(Y_test, y_pred[0]),
+        'recall': recall_score(Y_test, y_pred[0]), 
+        'precision': precision_score(Y_test, y_pred[0]),
+        'f1_score': f1_score(Y_test, y_pred[0])
+    }
+    
+    

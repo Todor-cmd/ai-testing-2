@@ -17,6 +17,11 @@ def mean_age_test(X_test, session):
     audit_rate_invariant = np.mean(y_pred_invariant)
     print(f"Audit Rate - Original: {audit_rate_original}, Invariant: {audit_rate_invariant}")
     print(f"Difference in Audit Rate: {audit_rate_original - audit_rate_invariant}")
+    return {
+        'original_rate': float(audit_rate_original),
+        'invariant_rate': float(audit_rate_invariant),
+        'difference': float(audit_rate_original - audit_rate_invariant)
+    }
 
 
 #  Audit Rate Invariance (Mean Age Test)
@@ -29,17 +34,25 @@ def zero_age_test(X_test, session):
     audit_rate_invariant = np.mean(y_pred_invariant)
     print(f"Audit Rate (zero) - Original: {audit_rate_original}, Invariant: {audit_rate_invariant}")
     print(f"Difference in Audit Rate(zero): {audit_rate_original - audit_rate_invariant}")
+    return {
+        'original_rate': float(audit_rate_original),
+        'zero_rate': float(audit_rate_invariant),
+        'difference': float(audit_rate_original - audit_rate_invariant)
+    }
 
 
 # Sensitivity Test (Small Variations)
 def sensitivity_test(X_test, session ,variations=[-5, +5]):
     y_pred_original = get_predictions(X_test, session=session)
+    results = {'original_rate': float(np.mean(y_pred_original)), 'variations': {}}
     for variation in variations:
         X_sensitive = X_test.copy()
         X_sensitive['persoon_leeftijd_bij_onderzoek'] += variation
         y_pred_sensitive = get_predictions(X_sensitive, session)
         audit_rate_sensitive = np.mean(y_pred_sensitive)
         print(f"Audit Sensitivity - Variation {variation}: {audit_rate_sensitive}")
+        results['variations'][variation] = float(audit_rate_sensitive)
+    return results
 
 # Age Swapping Test
 def age_swapping_test(X_test, session):
@@ -49,6 +62,9 @@ def age_swapping_test(X_test, session):
     y_pred_swapped = get_predictions(X_swap, session)
     swap_diff = np.mean(y_pred_original != y_pred_swapped)
     print(f"Age Swapping - Prediction Difference: {swap_diff}")
+    return {
+        'prediction_difference': float(swap_diff)
+    }
 
 
 # Invariant Relation: Changing a Neighborhood Feature to a Constant
@@ -118,4 +134,12 @@ def metamorphic_test_age(X, session):
         'sensitivity_test': sensitivity_test(X, session),
         'age_swapping_test': age_swapping_test(X, session)
     }
+    return results
+
+def metamorphic_test(X_test, session):
+    results = {
+        'metamorphic_test_age': metamorphic_test_age(X_test, session),
+        'metamorphic_test_regions': metamorphic_test_regions(X_test, session)
+    }
+    
     return results
