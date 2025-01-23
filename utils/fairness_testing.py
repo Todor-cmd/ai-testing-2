@@ -185,7 +185,7 @@ def print_fairness_report(results):
             print(f"Average Odds Difference: {metrics['average_odds_difference']:.3f}")
 
 
-def plot_fairness_metrics(results):
+def plot_fairness_results(results, save_path='results/comparison_results/fairness_plot.png'):
     clean_results = {}
     for model_name in results:
         clean_name = f"model{model_name.split('model_')[1]}"
@@ -237,43 +237,45 @@ def plot_fairness_metrics(results):
 
         plt.tight_layout()
 
+        plt.savefig(f"{save_path}_{metric}.png")
+
     plt.show()
 
 
-if __name__ == "__main__":
-    data_path = 'data\investigation_train_large_checked.csv'
-    model_paths = [
-        'models\model_1.onnx',
-        'models\model_2.onnx'
-    ]
+# if __name__ == "__main__":
+#     data_path = 'data\investigation_train_large_checked.csv'
+#     model_paths = [
+#         'models\model_1.onnx',
+#         'models\model_2.onnx'
+#     ]
 
-    protected_attributes = [
-        'persoon_leeftijd_bij_onderzoek',
-        'adres_aantal_brp_adres',
-        'adres_aantal_verschillende_wijken',
-        'adres_aantal_verzendadres',
-        'adres_aantal_woonadres_handmatig',
-        'adres_dagen_op_adres',
-        'adres_recentst_onderdeel_rdam',
-        'adres_recentste_buurt_groot_ijsselmonde',
-        'adres_recentste_buurt_nieuwe_westen',
-        'adres_recentste_buurt_other',
-        'adres_recentste_buurt_oude_noorden',
-        'adres_recentste_buurt_vreewijk',
-        'adres_recentste_plaats_other',
-        'adres_recentste_plaats_rotterdam',
-        'adres_recentste_wijk_charlois',
-        'adres_recentste_wijk_delfshaven',
-        'adres_recentste_wijk_feijenoord',
-        'adres_recentste_wijk_ijsselmonde',
-        'adres_recentste_wijk_kralingen_c',
-        'adres_recentste_wijk_noord',
-        'adres_recentste_wijk_other',
-        'adres_recentste_wijk_prins_alexa',
-        'adres_recentste_wijk_stadscentru',
-        'adres_unieke_wijk_ratio'
-    ]
+#     protected_attributes = [
+#         'persoon_leeftijd_bij_onderzoek',
+#         'adres_aantal_brp_adres',
+#         'adres_aantal_verschillende_wijken',
+#         'adres_aantal_verzendadres',
+#         'adres_aantal_woonadres_handmatig',
+#         'adres_dagen_op_adres',
+#         'adres_recentst_onderdeel_rdam',
+#         'adres_recentste_buurt_groot_ijsselmonde',
+#         'adres_recentste_buurt_nieuwe_westen',
+#         'adres_recentste_buurt_other',
+#         'adres_recentste_buurt_oude_noorden',
+#         'adres_recentste_buurt_vreewijk',
+#         'adres_recentste_plaats_other',
+#         'adres_recentste_plaats_rotterdam',
+#         'adres_recentste_wijk_charlois',
+#         'adres_recentste_wijk_delfshaven',
+#         'adres_recentste_wijk_feijenoord',
+#         'adres_recentste_wijk_ijsselmonde',
+#         'adres_recentste_wijk_kralingen_c',
+#         'adres_recentste_wijk_noord',
+#         'adres_recentste_wijk_other',
+#         'adres_recentste_wijk_prins_alexa',
+#         'adres_recentste_wijk_stadscentru',
+#         'adres_unieke_wijk_ratio'
+#     ]
 
-    results = analyze_model_fairness(data_path, model_paths, protected_attributes)
-    # plot_fairness_metrics(results)
-    print_fairness_report(results)
+#     results = analyze_model_fairness(data_path, model_paths, protected_attributes)
+#     # plot_fairness_metrics(results)
+#     print_fairness_report(results)
